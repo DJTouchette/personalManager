@@ -1,5 +1,5 @@
 var assert = require('chai').assert;
-var Todo = require('../../../dist/models/Todos.js');
+var Todo = require('../../models/index.js');
 
 describe('String#split', function(){
   it('should return an array', function(){
