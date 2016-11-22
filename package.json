@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha src/test/*",
+    "test:controllers": "mocha --compilers js:babel-core/register src/test/controllers/*",
     "start": "nodemon src/index.js --exec babel-node",
     "build": "babel src -d dist",
     "serve": "node dist/index.js",
