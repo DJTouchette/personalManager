@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose';
+import mongoose from 'mongoose';
 
-const todoSchema = new Schema({
+const todoSchema = new mongoose.Schema({
 	// The text of the todo
 	content: String,
 	// If todo belongs to a bigger todo.
@@ -9,7 +9,7 @@ const todoSchema = new Schema({
 			type: Boolean,
 	},
 	// The ID of the bigger todo
-	parentID: Schema.Types.ObjectId,
+	parentID: mongoose.Schema.Types.ObjectId,
 	// Time frame of the fight, can only be daily, weekly, monthly, yearly
 	timeFrame: {
 			type: String,
@@ -21,9 +21,12 @@ const todoSchema = new Schema({
 			required: true,
 	},
 	// The id of the scheduled event
-	scheduleID: Schema.Types.ObjectId,
+	scheduleID: mongoose.Schema.Types.ObjectId,
+	// Belongs to this User
+	belongsTo: mongoose.Schema.Types.ObjectId,
+
 });
 
-const Todo = model('todo', todoSchema);
+const Todo = mongoose.model('todo', todoSchema);
 
 export default Todo;
