@@ -1,7 +1,9 @@
-import { TodoController } from '../controllers/index.js';
+import { TodoController, UserController, TodoEventController } from '../controllers/index.js';
 
 const controllerReference = {
 	Todo: { controller: TodoController, route: 'todo' },
+	User: { controller: UserController, route: 'user' },
+	TodoEvent: { controller: TodoEventController, route: 'todoEvent' },
 }
 
 const baseRoute = '/api/v1/';

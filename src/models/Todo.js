@@ -5,25 +5,24 @@ const todoSchema = new mongoose.Schema({
 	content: String,
 	// If todo belongs to a bigger todo.
 	hasParent: {
-			required: true,
-			type: Boolean,
+		required: true,
+		type: Boolean,
 	},
 	// The ID of the bigger todo
-	parentID: mongoose.Schema.Types.ObjectId,
+	parentID: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'todoEvent'
+	},
 	// Time frame of the fight, can only be daily, weekly, monthly, yearly
 	timeFrame: {
-			type: String,
-			enum: ['daily', 'weekly', 'monthly', 'yearly'],
+		type: String,
+		enum: ['daily', 'weekly', 'monthly', 'yearly'],
 	},
-	// If the todo is part of a event
-	hasSchedule: {
-			type: Boolean,
-			required: true,
-	},
-	// The id of the scheduled event
-	scheduleID: mongoose.Schema.Types.ObjectId,
 	// Belongs to this User
-	belongsTo: mongoose.Schema.Types.ObjectId,
+	belongsTo: {
+		type: mongoose.Schema.Types.ObjectId, 
+		ref: 'user',
+	},
 
 });
 

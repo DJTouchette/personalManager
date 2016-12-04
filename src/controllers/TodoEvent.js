@@ -1,11 +1,11 @@
 import BaseController from './BaseController';
 // Reference to the model
-const reference = 'Todo';
+const reference = 'TodoEvent';
 
-class TodoController extends BaseController {
+class TodoEventController extends BaseController {
 	constructor() {
 		super(reference);
 	}
 }
 
-export default TodoController;
+export default TodoEventController;
