@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const todoSchema = new mongoose.Schema({
+export const todoSchema = new mongoose.Schema({
 	// The text of the todo
 	content: String,
 	// If todo belongs to a bigger todo.

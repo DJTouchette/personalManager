@@ -7,8 +7,10 @@ class TodoEventRoutes extends BaseRoute {
 		super(routeReference);
 	}
 
+
 	initiate(app) {
-		super.initiateRoutes(app);
+		this.initiateRoutes(app);
+		app.put(this.routeId + '/addtodo', this.controller.addTodo.bind(this));
 	}
 }
 

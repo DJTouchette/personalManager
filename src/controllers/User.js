@@ -8,7 +8,6 @@ class UserController extends BaseController {
 	}
 
 	signup(req, res, next) {
-		console.log('here son');
 		super.create(req, res, next);
 	}
 }

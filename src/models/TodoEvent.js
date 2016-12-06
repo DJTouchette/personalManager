@@ -1,15 +1,11 @@
 import mongoose from 'mongoose';
+import { todoSchema } from './Todo.js';
 
 const todoEventSchema = new mongoose.Schema({
 
 	content: String,
 
-	todos: [
-		{ 
-			type: mongoose.Schema.Types.ObjectId, 
-			ref: 'todo',
-		}
-	],
+	todos: [todoSchema],
 
 	timeFrame: {
 		type: String,

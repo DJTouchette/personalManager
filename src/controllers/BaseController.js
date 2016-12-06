@@ -43,12 +43,17 @@ class BaseController {
    * Gets all controllers model's documents
    */ 
    getAll(req, res, next) {
-    this.controller.model.find({}, (err, docs) => {
-      if (err) return res.json(PrettyErrors.err(err));
+    const getAllPromise = this.controller.model.find({}).exec();
+
+    getAllPromise.then((docs) => {
       if (!docs) return res.json(PrettyErrors.noDoc());
 
       return res.json(makeResponse(true, docs));
+    })
+    .catch((err) => {
+      return res.json(PrettyErrors.err(err));
     });
+
   }
 
   /*
@@ -87,7 +92,8 @@ class BaseController {
   * @param body {Object} fields that have been modified.
   */ 
   updateDocument(req, res, next) {
-    const { id, body } = req.params;
+    const { id } = req.params;
+    const { body } = req;
 
     this.controller.model.findByIdAndUpdate(id, { $set: body }, { new: true }, (err, updatedDoc) => {
       if (err) return res.json(PrettyErrors.err(err));

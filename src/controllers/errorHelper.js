@@ -1,4 +1,4 @@
-function makeResponse(success, content) {
+export function makeResponse(success, content) {
   if (success) return { success: true, content: content  };
 
   return { success: false, err: content }

@@ -30,7 +30,7 @@ class BaseRoute {
 	}
 
 	updateById(app) {
-		app.put(this.routeId, this.controller.create.bind(this));
+		app.put(this.routeId, this.controller.updateDocument.bind(this));
 	}
 
 	getAll(app) {

@@ -12,8 +12,6 @@
     // ========================================= //
     import env from 'node-env-file';
 
-    // import process from 'process';
-
     // ======= All configs live here ============ //
     // ========================================= //
     import config from '../config/index.js';
