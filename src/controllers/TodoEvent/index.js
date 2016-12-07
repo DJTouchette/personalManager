@@ -1,8 +1,7 @@
-import BaseController from './BaseController';
-import { Todo } from '../models/index.js';
+import BaseController from '../BaseController/index';
+import { Todo } from '../../models/index';
 
-import PrettyErrors from './errorHelper.js';
-import { makeResponse } from './errorHelper.js';
+import { makeResponse, PrettyErrors } from '../ControllerHelpers/index';
 
 // Reference to the model
 const reference = 'TodoEvent';

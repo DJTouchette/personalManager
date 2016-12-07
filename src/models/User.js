@@ -19,8 +19,9 @@ function hashPassword(next) {
 	bcrypt.hash(ctx.password, saltRounds, function(err, hash) {
   	if (err) next(err);
   	ctx.password = hash;
+
+  	next();
 	});
-	next();
 }
 
 userSchema.pre('save', hashPassword);

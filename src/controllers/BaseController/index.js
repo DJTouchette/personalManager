@@ -1,5 +1,5 @@
-import { Todo, User, TodoEvent } from '../models/index.js';
-import PrettyErrors from './errorHelper.js';
+import { Todo, User, TodoEvent } from '../../models/index.js';
+import { PrettyErrors } from '../ControllerHelpers/index';
 
 const modelReference = {
   Todo,

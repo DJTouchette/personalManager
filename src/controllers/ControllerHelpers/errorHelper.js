@@ -6,7 +6,6 @@ export function makeResponse(success, content) {
 
 const PrettyErrs = {};
 
-
 /*
 * Makes error based on the error message and code of mongoose error
 * @param err {mongooseErr} mongoose error Object.

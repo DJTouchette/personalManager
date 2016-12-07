@@ -1,4 +1,4 @@
-import BaseController from './BaseController';
+import BaseController from '../BaseController/index';
 // Reference to the model.
 const reference = 'User';
 

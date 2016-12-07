@@ -1,5 +1,5 @@
-import TodoController from './Todo.js';
-import UserController from './User.js';
-import TodoEventController from './TodoEvent.js';
+import TodoController from './Todo/index';
+import UserController from './User/index';
+import TodoEventController from './TodoEvent/index';
 
 export { TodoController, UserController, TodoEventController };
