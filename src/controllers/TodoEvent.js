@@ -17,24 +17,34 @@ class TodoEventController extends BaseController {
 */ 
   addTodo(req, res, next) {
     const { id } = req.params;
-    const todoID = req.body.id;
+    const { todoID } = req.body;
     const ctx = this;
+    let foundTodo;
 
-    Todo.findById(todoID, (err, doc) => {
-    	if (err) return res.json(PrettyErrors.err(err));
+    if (!todoID) return res.json(makeResponse(false, "Must provide todo id and todo event id."));
+    const findTodo = Todo.findById(todoID).exec();
+
+    findTodo.then((doc) => {
     	if (!doc) return res.json(PrettyErrors.noDoc());
-
-    	ctx.controller.model.findById(id, (err, todoEvent) => {
-	    	if (err) return res.json(PrettyErrors.err(err));
-	    	if (!todoEvent) return res.json(PrettyErrors.noDoc());
-
-	    	todoEvent.todos.push(doc);
-	    	todoEvent.save((err, savedTodoEvent) => {
-	    		if (err) return res.json(PrettyErrors.err(err));
-
-	    		return res.json(makeResponse(true, savedTodoEvent));
-	    	});
-    	});
+    	
+    	return doc;
+    })
+    .then((todo) => {
+    	foundTodo = todo;
+    	
+    	return ctx.controller.model.findById(id).exec();
+    })
+    .then((todoEvent) => {
+    	if (!todoEvent) return res.json(PrettyErrors.noDoc());
+    	
+    	todoEvent.todos.push(foundTodo);
+    	return todoEvent.save();
+    })
+    .then((savedTodoEvent) => {
+    	return res.json(makeResponse(true, savedTodoEvent));
+    })
+    .catch((err) => {
+   		return res.json(PrettyErrors.err(err));
     });
   }
 

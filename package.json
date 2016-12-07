@@ -24,10 +24,10 @@
     "apidoc": "^0.16.1",
     "expect.js": "^0.2.0",
     "chai": "^3.5.0",
-    "request": "^2.79.0",
-    "mocha": "^3.1.2"
+    "request": "^2.79.0"
   },
   "dependencies": {
+    "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.14.0",

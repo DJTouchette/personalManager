@@ -1,4 +1,5 @@
 import BaseController from './BaseController';
+
 // Reference to the model
 const reference = 'Todo';
 
