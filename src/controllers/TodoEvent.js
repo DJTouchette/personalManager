@@ -12,6 +12,10 @@ class TodoEventController extends BaseController {
 		super(reference);
 	}
 
+	findTodo(id) {
+		return Todo.findById(id).exec();
+	}
+
 /*
 * Adds a todo to the todoEvent
 */ 
@@ -22,7 +26,7 @@ class TodoEventController extends BaseController {
     let foundTodo;
 
     if (!todoID) return res.json(makeResponse(false, "Must provide todo id and todo event id."));
-    const findTodo = Todo.findById(todoID).exec();
+    const findTodo = this.controller.findTodo(todoID);
 
     findTodo.then((doc) => {
     	if (!doc) return res.json(PrettyErrors.noDoc());
@@ -47,7 +51,6 @@ class TodoEventController extends BaseController {
    		return res.json(PrettyErrors.err(err));
     });
   }
-
 
 }
 
