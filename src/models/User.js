@@ -17,7 +17,10 @@ const userSchema = new mongoose.Schema({
 function hashPassword(next) {
 	const ctx = this;
 	bcrypt.hash(ctx.password, saltRounds, function(err, hash) {
-  	if (err) next(err);
+  	if (err) {
+  		const initErr = new Error(err);
+  		next(initErr);
+  	}
   	ctx.password = hash;
 
   	next();

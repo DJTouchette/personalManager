@@ -1,53 +1,38 @@
 import BaseController from '../BaseController/index';
 import { Todo } from '../../models/index';
 
+import helpers from './helpers';
 import { makeResponse, PrettyErrors } from '../ControllerHelpers/index';
 
 // Reference to the model
 const reference = 'TodoEvent';
 
 class TodoEventController extends BaseController {
-	constructor() {
-		super(reference);
-	}
+    constructor() {
+    super(reference);
+  }
 
-	findTodo(id) {
-		return Todo.findById(id).exec();
-	}
+  findTodo(id) {
+    return Todo.findById(id).exec();
+  }
 
 /*
 * Adds a todo to the todoEvent
 */ 
   addTodo(req, res, next) {
-    const { id } = req.params;
-    const { todoID } = req.body;
-    const ctx = this;
-    let foundTodo;
+    const errs = helpers.checkForTodoID(req);
 
-    if (!todoID) return res.json(makeResponse(false, "Must provide todo id and todo event id."));
-    const findTodo = this.controller.findTodo(todoID);
+    if (errs) return res.json(makeResponse(false, errs));
 
-    findTodo.then((doc) => {
-    	if (!doc) return res.json(PrettyErrors.noDoc());
-    	
-    	return doc;
-    })
-    .then((todo) => {
-    	foundTodo = todo;
-    	
-    	return ctx.controller.model.findById(id).exec();
-    })
-    .then((todoEvent) => {
-    	if (!todoEvent) return res.json(PrettyErrors.noDoc());
-    	
-    	todoEvent.todos.push(foundTodo);
-    	return todoEvent.save();
-    })
-    .then((savedTodoEvent) => {
-    	return res.json(makeResponse(true, savedTodoEvent));
-    })
-    .catch((err) => {
-   		return res.json(PrettyErrors.err(err));
+    const helperParams = {
+      id: req.params.id,
+      todoID: req.body.todoID,
+      ctx: this,
+    };
+
+    const addTodoPromise = helpers.addTodo(helperParams);
+    addTodoPromise.then((response) => {
+      res.json(response);
     });
   }
 
