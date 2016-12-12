@@ -11,8 +11,13 @@ class UserRoutes extends BaseRoute {
 		app.post('/signup', this.controller.signup.bind(this));
 	}
 
+	signIn(app) {
+		app.post('/authenticate', this.controller.signIn.bind(this));
+	}
+
 	initiate(app) {
 		this.signup(app);
+		this.signIn(app)
 		super.initiateRoutes(app);
 	}
 }

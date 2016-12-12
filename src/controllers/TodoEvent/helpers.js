@@ -7,33 +7,33 @@ function addTodo(params) {
 	const { id, todoID, ctx } = params;
 	let foundTodo;
 
-	  if (!todoID) return res.json(makeResponse(false, noTodoFoundErr));
-    const findTodo = ctx.controller.findTodo(todoID);
+  if (!todoID) return res.json(makeResponse(false, noTodoFoundErr));
+   const findTodo = ctx.controller.findTodo(todoID);
 
-    const response = findTodo.then((doc) => {
-    	if (!doc) return PrettyErrors.noDoc();
+   const response = findTodo.then((doc) => {
+   	if (!doc) return PrettyErrors.noDoc();
     	
-    	return doc;
-    })
-    .then((todo) => {
-    	foundTodo = todo;
+   	return doc;
+   })
+   .then((todo) => {
+   	foundTodo = todo;
     	
-    	return ctx.controller.model.findById(id).exec();
-    })
-    .then((todoEvent) => {
-    	if (!todoEvent) return PrettyErrors.noDoc();
+   	return ctx.controller.model.findById(id).exec();
+   })
+   .then((todoEvent) => {
+   	if (!todoEvent) return PrettyErrors.noDoc();
    
-    	todoEvent.todos.push(foundTodo);
-    	return todoEvent.save();
-    })
-    .then((savedTodoEvent) => {
-    	return makeResponse(true, savedTodoEvent);
-    })
-    .catch((err) => {
-   		return PrettyErrors.err(err);
-    });
+   	todoEvent.todos.push(foundTodo);
+   	return todoEvent.save();
+   })
+   .then((savedTodoEvent) => {
+   	return makeResponse(true, savedTodoEvent);
+   })
+   .catch((err) => {
+  		return PrettyErrors.err(err);
+   });
 
-    return response;
+   return response;
 
 }
 

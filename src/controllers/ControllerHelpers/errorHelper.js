@@ -11,12 +11,12 @@ const PrettyErrs = {};
 * @param err {mongooseErr} mongoose error Object.
 */ 
 PrettyErrs.err = (err) => {
-
 	if (err.name === 'CastError' && err.kind === 'ObjectId') {
 		return PrettyErrs.noDoc();
 	}
 
-	if (err.code === 1100 || 11001 === err.code) {
+	if (err.code === 11000 || 11001 === err.code) {
+		console.log('heeeeere');
 		const duplicationErr = {
 			msg: 'Diplicate found.',
 			submitted: err.opp,

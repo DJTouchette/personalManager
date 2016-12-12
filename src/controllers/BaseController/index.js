@@ -24,6 +24,10 @@ class BaseController {
     this.model = modelReference[reference];
   }
 
+  getBy(param) {
+    return this.controller.model.findOne(param).exec();
+  }
+
    /*
    * Gets controllers model's document by ID
    * @param req.params.id {String} ID of the requested document
@@ -65,7 +69,7 @@ class BaseController {
     const newModel = new this.controller.model(body);
 
     newModel.save((err) => {
-      if (err) return res.json(PrettyErrors.err(err));
+      if (err) return res.json(makeResponse(false, err.errmsg));
 
       return res.json(makeResponse(true, newModel));
     });
