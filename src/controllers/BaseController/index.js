@@ -1,5 +1,5 @@
 import { Todo, User, TodoEvent } from '../../models/index.js';
-import { PrettyErrors } from '../ControllerHelpers/index';
+import { PrettyErrs } from '../ControllerHelpers/index';
 
 const modelReference = {
   Todo,
@@ -36,8 +36,8 @@ class BaseController {
     const { id } = req.params;
 
     this.controller.model.findById(id, (err, doc) => {
-      if (err) return res.json(PrettyErrors.err(err));
-      if (!doc) return res.json(PrettyErrors.noDoc());
+      if (err) return PrettyErrs.err(res, err);
+      if (!doc) return PrettyErrs.noDoc(res);
 
       return res.json(makeResponse(true, doc));
     });
@@ -50,12 +50,12 @@ class BaseController {
     const getAllPromise = this.controller.model.find({}).exec();
 
     getAllPromise.then((docs) => {
-      if (!docs) return res.json(PrettyErrors.noDoc());
+      if (!docs) return PrettyErrs.noDoc(res);
 
       return res.json(makeResponse(true, docs));
     })
     .catch((err) => {
-      return res.json(PrettyErrors.err(err));
+      return PrettyErrs.err(res, err);
     });
 
   }
@@ -69,7 +69,7 @@ class BaseController {
     const newModel = new this.controller.model(body);
 
     newModel.save((err) => {
-      if (err) return res.json(makeResponse(false, err.errmsg));
+      if (err) return PrettyErrs.default(res, err.msg);
 
       return res.json(makeResponse(true, newModel));
     });
@@ -84,7 +84,7 @@ class BaseController {
     const { id } = req.params;
 
     this.controller.model.remove({ _id: id }, (err) => {
-      if (err) return res.json(PrettyErrors.err(err));
+      if (err) return res.json(PrettyErrs.err(res, err));
 
       return res.json(makeResponse(true, 'Document deleted'));
     });
@@ -100,7 +100,7 @@ class BaseController {
     const { body } = req;
 
     this.controller.model.findByIdAndUpdate(id, { $set: body }, { new: true }, (err, updatedDoc) => {
-      if (err) return res.json(PrettyErrors.err(err));
+      if (err) return res.json(PrettyErrs.err(res, err));
 
       return res.json(makeResponse(true, updatedDoc));
     });

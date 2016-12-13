@@ -2,7 +2,7 @@ import BaseController from '../BaseController/index';
 import { Todo } from '../../models/index';
 
 import helpers from './helpers';
-import { makeResponse, PrettyErrors } from '../ControllerHelpers/index';
+import { makeResponse, PrettyErrs } from '../ControllerHelpers/index';
 
 // Reference to the model
 const reference = 'TodoEvent';
@@ -22,7 +22,7 @@ class TodoEventController extends BaseController {
   addTodo(req, res, next) {
     const errs = helpers.checkForTodoID(req);
 
-    if (errs) return res.json(makeResponse(false, errs));
+    if (errs) return PrettyErrs.validationErr(res, errs);
 
     const helperParams = {
       id: req.params.id,

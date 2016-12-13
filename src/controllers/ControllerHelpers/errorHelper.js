@@ -4,38 +4,55 @@ export function makeResponse(success, content) {
   return { success: false, err: content }
 }
 
+const defaultErr = (err) => {
+	return {
+		msg: err.errmsg,
+		submitted: err.opp,
+	};
+}
+
+const duplicationErr = (err) => {
+	return {
+		msg: 'Diplicate found.',
+		submitted: err.opp,
+	};
+};
+
+const statusCodeResponse = (res, err) => {
+	return res.status(401).json(makeResponse(false, err));
+}
+
+const notFound = 'Document not found';
+
+
 const PrettyErrs = {};
+
+PrettyErrs.noDoc = (doc) => {
+	return makeResponse(true, notFound);
+}
+
+PrettyErrs.validationErr = (res, validationErr) => {
+	return res.status(401).json(makeResponse(false, err));
+};
+
+PrettyErrs.default = (res, err) => {
+	return statusCodeResponse(res, err);
+}
 
 /*
 * Makes error based on the error message and code of mongoose error
 * @param err {mongooseErr} mongoose error Object.
 */ 
-PrettyErrs.err = (err) => {
+PrettyErrs.err = (res, err) => {
 	if (err.name === 'CastError' && err.kind === 'ObjectId') {
-		return PrettyErrs.noDoc();
+		return statusCodeResponse(res, PrettyErrs.noDoc());
 	}
 
 	if (err.code === 11000 || 11001 === err.code) {
-		console.log('heeeeere');
-		const duplicationErr = {
-			msg: 'Diplicate found.',
-			submitted: err.opp,
-		};
-		return makeResponse(false, duplicationErr)
+		return statusCodeResponse(res, duplicationErr(err));
 	}
 
-	const defaultErr = {
-		msg: err.errmsg,
-		submitted: err.opp,
-	}
-
-	return makeResponse(false, defaultErr);
-}
-
-PrettyErrs.noDoc = (doc) => {
-	const notFound = 'Document not found';
-
-	return makeResponse(true, notFound);
+	return statusCodeResponse(res, defaultErr(err));
 }
 
 export default PrettyErrs;

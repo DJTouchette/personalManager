@@ -7,18 +7,24 @@ function unHashPassword(plainTextPassword, hash) {
 	return bcrypt.compare(plainTextPassword, hash);
 }
 
-function createToken(user, secret) {
-	return jwt.sign(user, secret, {
+function createToken(user) {
+	return jwt.sign(user, process.env.SECRET, {
 		expiresIn: '1 day'
 	});
 }
 
-function verifyToken(token, secret) {
-	return jwt.verify(token, secret);
+function checkForEmailPass(req) {
+	req.checkBody('email', 'Must provide email.')
+	.notEmpty();
+
+	req.checkBody('password', 'Must provide password.')
+	.notEmpty();
+
+	return req.validationErrors();	
 }
 
 helpers.unHashPassword = unHashPassword;
 helpers.createToken = createToken;
-helpers.verifyToken = verifyToken;
+helpers.checkForEmailPass = checkForEmailPass;
 
 export default helpers;
