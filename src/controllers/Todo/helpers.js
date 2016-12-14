@@ -2,8 +2,7 @@ const helpers = {};
 
 function checkForContent(req) {
 	req.checkBody('content', 'Content cannot be blank.')
-	.notEmpty()
-	.isAlpha();
+	.notEmpty();
 }
 
 function checkForParent(req) {

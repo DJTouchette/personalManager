@@ -36,10 +36,9 @@ class BaseController {
     const { id } = req.params;
 
     this.controller.model.findById(id, (err, doc) => {
-      if (err) return PrettyErrs.err(res, err);
-      if (!doc) return PrettyErrs.noDoc(res);
+      const noErrs = PrettyErrs.err(res, err, doc);
 
-      return res.json(makeResponse(true, doc));
+      if (noErrs === true) return res.json(makeResponse(true, doc));
     });
   }
 
@@ -50,9 +49,9 @@ class BaseController {
     const getAllPromise = this.controller.model.find({}).exec();
 
     getAllPromise.then((docs) => {
-      if (!docs) return PrettyErrs.noDoc(res);
+      const noErrs = PrettyErrs.err(res, null, docs);
 
-      return res.json(makeResponse(true, docs));
+      if (noErrs === true) return res.json(makeResponse(true, docs));
     })
     .catch((err) => {
       return PrettyErrs.err(res, err);
@@ -64,14 +63,15 @@ class BaseController {
   * Creates controllers model's document
   * @param body {Object} fields for a new model
   */ 
-  create(req, res, next) {
+  create(req, res, next, hasCreator) {
     const { body } = req;
     const newModel = new this.controller.model(body);
 
-    newModel.save((err) => {
-      if (err) return PrettyErrs.default(res, err.msg);
+    if (hasCreator) newModel.belongsTo = req.decoded._doc._id;
 
-      return res.json(makeResponse(true, newModel));
+    newModel.save((err) => {
+      const noErrs = PrettyErrs.err(res, err, newModel);
+      if (noErrs === true) return res.json(makeResponse(true, newModel));
     });
 
   }
@@ -84,9 +84,9 @@ class BaseController {
     const { id } = req.params;
 
     this.controller.model.remove({ _id: id }, (err) => {
-      if (err) return res.json(PrettyErrs.err(res, err));
+      const noErrs = PrettyErrs.err(res, err, true);
 
-      return res.json(makeResponse(true, 'Document deleted'));
+      if (noErrs === true) return res.json(makeResponse(true, 'Document deleted'));
     });
   }
 
@@ -100,9 +100,21 @@ class BaseController {
     const { body } = req;
 
     this.controller.model.findByIdAndUpdate(id, { $set: body }, { new: true }, (err, updatedDoc) => {
-      if (err) return res.json(PrettyErrs.err(res, err));
+      const noErrs = PrettyErrs.err(res, err, updatedDoc);
 
-      return res.json(makeResponse(true, updatedDoc));
+      if (noErrs === true) return res.json(makeResponse(true, updatedDoc));
+    });
+  }
+
+  getByUser(req, res, next) {
+    const userID = req.decoded._doc._id;
+
+    this.controller.model.find({ belongsTo: userID }).exec()
+    .then((docs) => {
+      return res.json(makeResponse(true, docs));
+    })
+    .catch((err) => {
+      return PrettyErrs.err(res, err, true);
     });
   }
 

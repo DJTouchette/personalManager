@@ -14,10 +14,9 @@ class TodoController extends BaseController {
 		helpers.checkForContent(req);
 		helpers.checkForParent(req);
 
-		const errs = req.validationErrors();
-		if (errs) return PrettyErrs.default(res, err);
+		const noErrs = PrettyErrs.err(res, req.validationErrors(), true);
 
-		super.create(req, res, next);
+		if (noErrs === true) super.create(req, res, next, true);
   }
 
 }

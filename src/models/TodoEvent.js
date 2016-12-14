@@ -17,6 +17,11 @@ const todoEventSchema = new mongoose.Schema({
 		required: true,
 	},
 
+	belongsTo: {
+		type: mongoose.Schema.Types.ObjectId, 
+		ref: 'user',
+	},
+
 });
 
 const TodoEvent = mongoose.model('todoEvent', todoEventSchema);

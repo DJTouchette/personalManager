@@ -39,7 +39,14 @@ class BaseRoute {
 		app.get(getAllRoute, this.controller.getAll.bind(this));
 	}
 
+	getByUser(app) {
+		const byUserRoute = this.routeName + '/user';
+
+		app.get(byUserRoute, this.controller.getByUser.bind(this));
+	}
+
 	initiateRoutes(app) {
+		this.getByUser(app);
 		this.getAll(app);
 		this.readById(app);
 		this.deleteById(app);

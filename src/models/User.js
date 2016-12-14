@@ -8,10 +8,17 @@ const userSchema = new mongoose.Schema({
 		unique: true,
 		required: true,
 	},
+
 	password: {
 		type: String,
 		required: true,
+	},
+
+	admin: {
+		type: Boolean,
+		default: false,
 	}
+
 });
 
 function hashPassword(next) {
