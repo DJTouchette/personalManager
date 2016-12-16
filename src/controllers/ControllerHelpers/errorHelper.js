@@ -57,4 +57,10 @@ PrettyErrs.err = (res, err, doc) => {
 	return true;
 }
 
+function handleErr(err) {
+	return this.json(makeResponse(false, err.message));
+}
+
+PrettyErrs.catch = handleErr;
+
 export default PrettyErrs;

@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 const helpers = {};
 
 function unHashPassword(plainTextPassword, hash) {
+	console.log(plainTextPassword, hash);
 	return bcrypt.compare(plainTextPassword, hash);
 }
 
