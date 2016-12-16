@@ -24,26 +24,11 @@ class TodoEventController extends BaseController {
 * Adds a todo to the todoEvent
 */ 
   addTodo(req, res, next) {
-    let foundTodo;
+    const findEventParams = { ctx: this, eventID: req.params.id, res: res };
 
-    const findTodoQuery = this.controller.findTodo(req.body.todoID);
-
-    findTodoQuery.then((todo) => {
-      foundTodo = todo;
-
-      return this.controller.model.findById(req.params.id).exec();
-    })
-    .then((todoEvent) => {
-      todoEvent.todos.push(foundTodo);
-
-      return todoEvent.save();
-    })
-    .then((savedTodoEvent) => {
-      return res.json(makeResponse(true, savedTodoEvent));
-    })
-    .catch((err) => {
-      return PrettyErrs.err(res, err, false);
-    });
+    this.controller.findTodo(req.body.todoID)
+    .then(helpers.findEvent.bind(findEventParams))
+    .catch(PrettyErrs.catch.bind(res));
   }
 
 }
