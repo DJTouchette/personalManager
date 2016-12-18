@@ -27,10 +27,11 @@
     "request": "^2.79.0"
   },
   "dependencies": {
-    "bcrypt": "^1.0.0",
+    "bcrypt": "^1.0.1",
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
+    "es6-promise": "^4.0.5",
     "express": "^4.14.0",
     "express-validator": "^3.0.0",
     "jsonwebtoken": "^7.1.9",
