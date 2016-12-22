@@ -21,6 +21,7 @@ class UserController extends BaseController {
 
 	signIn(req, res, next) {
 		const validationErrs = helpers.checkForEmailPass(req);
+		console.log(validationErrs);
 		if (validationErrs) return PrettyErrs.default(res, validationErrs);
 		
 		const { email, password } = req.body;

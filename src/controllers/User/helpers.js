@@ -32,7 +32,8 @@ function sendResponse(isCorrect) {
 }
 
 function validatePassword(user) {
-	if (!user) return Promise.reject(new Error('user does not exist'));
+	console.log(user);
+	if (!user) return Promise.reject(new Error('User does not exist'));
 	
 	const isPasswordCorrect = unHashPassword(this.password, user.password);
 	const responseVars = { res: this.res, user };

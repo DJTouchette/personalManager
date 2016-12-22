@@ -1,4 +1,8 @@
-import { TodoController, UserController, TodoEventController } from '../controllers/index.js';
+import { 
+	TodoController, 
+	UserController, 
+	TodoEventController 
+} from '../controllers/index.js';
 
 const controllerReference = {
 	Todo: { controller: TodoController, route: 'todo' },
