@@ -1,15 +1,12 @@
 import BaseController from '../BaseController/index';
-import { Todo } from '../../models/index';
+import { Todo, TodoEvent } from '../../models/index';
 
 import helpers from './helpers';
 import { makeResponse, PrettyErrs } from '../ControllerHelpers/index';
 
-// Reference to the model
-const reference = 'TodoEvent';
-
 class TodoEventController extends BaseController {
     constructor() {
-    super(reference);
+    super(TodoEvent);
   }
 
   findTodo(id) {
@@ -20,9 +17,7 @@ class TodoEventController extends BaseController {
     super.create(req, res, next, true);
   }
 
-/*
-* Adds a todo to the todoEvent
-*/ 
+  // Adds Todo to TodoEvent.
   addTodo(req, res, next) {
     const findEventParams = { ctx: this, eventID: req.params.id, res: res };
 

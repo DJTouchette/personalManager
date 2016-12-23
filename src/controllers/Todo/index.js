@@ -1,15 +1,17 @@
 import BaseController from '../BaseController/index';
 import helpers from './helpers';
+import { Todo } from '../../models/index.js';
 import { makeResponse, PrettyErrs } from '../ControllerHelpers/index';
 
-// Reference to the model
-const reference = 'Todo';
-
+// Todo controller, handles all actions belonging to the Todo model.
 class TodoController extends BaseController {
 	constructor() {
-		super(reference);
+		super(Todo);
 	}
 
+  /*
+  * Validates fields and calls BaseController.create
+  */ 
 	create(req, res, next) {
 		helpers.checkForContent(req);
 		helpers.checkForParent(req);

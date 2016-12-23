@@ -1,11 +1,4 @@
-import { Todo, User, TodoEvent } from '../../models/index.js';
 import { PrettyErrs } from '../ControllerHelpers/index';
-
-const modelReference = {
-  Todo,
-  User,
-  TodoEvent,
-};
 
 /*
 * Makes a response
@@ -18,10 +11,14 @@ export function makeResponse(success, content) {
   return { success: false, err: content }
 }
 
+/*
+* Base controller class with basic CRUD functionality
+* @paramreference {String} reference to the controllers model.
+*/ 
 class BaseController {
-  constructor(reference) {
+  constructor(model) {
     // Initiate model from reference
-    this.model = modelReference[reference];
+    this.model = model
   }
 
   getBy(param) {
@@ -62,6 +59,7 @@ class BaseController {
   /*
   * Creates controllers model's document
   * @param body {Object} fields for a new model
+  * @param hasCreator {boolean} if the object belongs to a user.
   */ 
   create(req, res, next, hasCreator) {
     const { body } = req;
@@ -106,6 +104,11 @@ class BaseController {
     });
   }
 
+
+  /*
+  * Retrieves documents that belong to a user
+  * @param req.decoded._doc._id {String} The users id, from the passed in JWT.
+  */ 
   getByUser(req, res, next) {
     const userID = req.decoded._doc._id;
 

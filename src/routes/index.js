@@ -8,9 +8,11 @@
 
   export default function testRoute(app, port) {
     const protectedRoutes = Router().use(RouteProtector);
+    
     app.get('/', (req, res) => {
       res.send('Hello! The API is at http://localhost:' + port + ' /api/v1');
     });
+
     app.use('/api', protectedRoutes)
 
     for (let i = 0; i < allRoutes.length; i ++) {

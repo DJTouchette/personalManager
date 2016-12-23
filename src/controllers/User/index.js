@@ -1,14 +1,12 @@
 import BaseController from '../BaseController/index';
 import { makeResponse } from '../ControllerHelpers/index';
 import { PrettyErrs } from '../ControllerHelpers/index';
+import { User } from '../../models/index.js';
 import helpers from './helpers';
-
-// Reference to the model.
-const reference = 'User';
 
 class UserController extends BaseController {
 	constructor() {
-		super(reference);
+		super(User);
 	}
 
 
@@ -21,7 +19,6 @@ class UserController extends BaseController {
 
 	signIn(req, res, next) {
 		const validationErrs = helpers.checkForEmailPass(req);
-		console.log(validationErrs);
 		if (validationErrs) return PrettyErrs.default(res, validationErrs);
 		
 		const { email, password } = req.body;

@@ -4,13 +4,13 @@ import {
 	TodoEventController 
 } from '../controllers/index.js';
 
+const baseRoute = '/api/v1/';
+
 const controllerReference = {
 	Todo: { controller: TodoController, route: 'todo' },
 	User: { controller: UserController, route: 'user' },
 	TodoEvent: { controller: TodoEventController, route: 'todoEvent' },
 }
-
-const baseRoute = '/api/v1/';
 
 class BaseRoute {
 	constructor(reference) {
