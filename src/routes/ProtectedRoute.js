@@ -9,7 +9,7 @@ export default function(req, res, next) {
 	});
 
 	jwt.verify(token, process.env.SECRET, function(err, decoded) {
-		if (err) return res.json({ success: false, content: 'Failed to authenticate JWT.' });
+		if (err) return res.status(403).json({ success: false, content: 'Failed to authenticate JWT.' });
 
 		req.decoded = decoded;
 		next();

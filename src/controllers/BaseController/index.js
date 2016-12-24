@@ -1,19 +1,19 @@
-import { PrettyErrs } from '../ControllerHelpers/index';
+import { PrettyErrs, makeResponse } from '../ControllerHelpers/index';
 
 /*
 * Makes a response
 * @param success {boolean} The status of the response
 * @param content {any} The contents of the response
 */ 
-export function makeResponse(success, content) {
-  if (success) return { success: true, content: content  };
+// export function makeResponse(success, content) {
+//   if (success) return { success: true, content: content  };
 
-  return { success: false, err: content }
-}
+//   return { success: false, err: content }
+// }
 
 /*
 * Base controller class with basic CRUD functionality
-* @paramreference {String} reference to the controllers model.
+* @param reference {String} reference to the controllers model.
 */ 
 class BaseController {
   constructor(model) {
