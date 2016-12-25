@@ -9,9 +9,7 @@ class TodoController extends BaseController {
 		super(Todo);
 	}
 
-  /*
-  * Validates fields and calls BaseController.create
-  */ 
+  // Validates fields and calls BaseController.create
 	create(req, res, next) {
 		helpers.checkForContent(req);
 		helpers.checkForParent(req);
