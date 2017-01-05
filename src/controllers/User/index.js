@@ -9,24 +9,40 @@ class UserController extends BaseController {
 		super(User);
 	}
 
-
 	signup(req, res, next) {
+		// Ensure email and password are present
 		const validationErrs = helpers.checkForEmailPass(req);
 		if (validationErrs) return PrettyErrs.default(res, validationErrs);
 
-		super.create(req, res, next);
+		const ctx = this;
+		const { body } = req;
+
+		// Create new User model
+    const newModel = new this.controller.model(body);
+
+		// Create promise to save user, then sign user in.
+		const newUser = new Promise ((resolve, reject) => {
+			// Saving new user
+			newModel.save((err) => {
+				if (err) return reject(err);
+    	})
+			.then(() => {
+				const validateVars = { res: res, password: body.password };
+
+				// Getting JWT for user
+				helpers.validatePassword(newModel, validateVars);
+			})
+			.catch(PrettyErrs.catch.bind(res));
+		})
+		.catch(PrettyErrs.catch.bind(res));; 
+		
 	}
 
 	signIn(req, res, next) {
 		const validationErrs = helpers.checkForEmailPass(req);
 		if (validationErrs) return PrettyErrs.default(res, validationErrs);
-		
-		const { email, password } = req.body;
-		const validateVars = { res: res, password: password };
 
-		super.getBy({ email })
-		.then(helpers.validatePassword.bind(validateVars))
-		.catch(PrettyErrs.catch.bind(res));
+		helpers.singUserIn(req, res, this);
 	}
 }
 
