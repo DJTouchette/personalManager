@@ -2,15 +2,19 @@ import BaseController from '../BaseController/index';
 import { Todo, TodoEvent } from '../../models/index';
 
 import helpers from './helpers';
+
 import { makeResponse, PrettyErrs } from '../ControllerHelpers/index';
 
 class TodoEventController extends BaseController {
-    constructor() {
+  constructor() {
     super(TodoEvent);
   }
 
   findTodo(id) {
-    return Todo.findById(id).exec();
+    return Todo.findById(id).exec()
+    .catch((err) => {
+      throw PrettyErrs.createErr('CantFind', 'Cannot find todo', 'todos', id);
+    });
   }
 
   create(req, res, next) {
@@ -19,11 +23,8 @@ class TodoEventController extends BaseController {
 
   // Adds Todo to TodoEvent.
   addTodo(req, res, next) {
-    const findEventParams = { ctx: this, eventID: req.params.id, res: res };
-
-    this.controller.findTodo(req.body.todoID)
-    .then(helpers.findEvent.bind(findEventParams))
-    .catch(PrettyErrs.catch.bind(res));
+    const genParams = { ctx: this, req: req, res: res };
+    helpers.addTodoGenerator(genParams);
   }
 
 }

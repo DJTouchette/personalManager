@@ -1,7 +1,6 @@
-import { makeResponse, PrettyErrs } from '../ControllerHelpers/index';
+import { makeResponse, PrettyErrs, async } from '../ControllerHelpers/index';
 import { noTodoFoundErr, todoIDFieldErr } from '../ControllerHelpers/constants';
 
-const helpers = {};
 
 function checkForTodoID(req) {
 	req.checkBody('todoID', todoIDFieldErr)
@@ -10,34 +9,35 @@ function checkForTodoID(req) {
 	return req.validationErrors();
 }
 
-function findEvent(todo) {
-	if (!todo) Promise.reject(new Error('Not a valid Todo ID.'));
+function addTodoGenerator(obj) {
+	const { ctx, req, res } = obj;
 
-	const { ctx, eventID } = this;
-	const addTodoParams = { todo, res: this.res };
+	const generator = function* () {
+    try {
+      const todo = yield ctx.controller.findTodo(req.body.todoID, res);
+      const todoEvent = yield ctx.controller.model.findById( req.params.id).exec();
 
-	ctx.controller.model.findById(eventID).exec()
-	.then(addTodoToEvent.bind(addTodoParams))
-	.catch(PrettyErrs.catch.bind(this.res));
+      if (!todo || !todoEvent) throw new Error('No Todo');
+
+      todoEvent.todos.push(todo);
+      todoEvent.save((err) => {
+        if (err) throw err;
+
+        res.json((makeResponse(true, todoEvent)));
+      });
+    }
+    catch(err) {
+      PrettyErrs.err(res, err);
+    }
+
+  }
+
+	async(generator)()
 }
 
-function addTodoToEvent(todoEvent) {
-	if (!todoEvent) Promise.reject(new Error('Not a valid TodoEvent ID.'));
-	todoEvent.todos.push(this.todo);
-
-	todoEvent.save()
-	.then(saveTodo.bind(this))
-	.catch(PrettyErrs.catch.bind(this.res));
+const helpers = {
+	checkForTodoID,
+	addTodoGenerator,
 }
-
-function saveTodo(savedTodoEvent) {
-	return this.res.json(makeResponse(true, savedTodoEvent));
-}
-
-
-helpers.checkForTodoID = checkForTodoID;
-helpers.findEvent = findEvent;
-helpers.addTodoToEvent = addTodoToEvent;
-helpers.saveTodo = saveTodo;
 
 export default helpers;

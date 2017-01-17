@@ -56,7 +56,14 @@ PrettyErrs.default = (res, err) => statusCodeResponse(res, err);
 PrettyErrs.err = (res, err, doc) => {
 	if (err) {
 		if (err.name === 'CastError' && err.kind === 'ObjectId') {
-			return statusCodeResponse(res, notFound);
+		
+			const message = { docType: err.model.collection.name, value: err.value, msg: notFound }
+			return statusCodeResponse(res, message);
+		}
+
+		if (err.name === 'CantFind') {
+			const message = { docType: err.docType, value: err.id, msg: notFound }
+			return statusCodeResponse(res, message);
 		}
 
 		if (err.code === 11000 || 11001 === err.code) {
@@ -82,6 +89,7 @@ PrettyErrs.err = (res, err, doc) => {
 * @param err {err} error Object.
 */ 
 function handleErr(err) {
+
 	const noPrettyErrs = PrettyErrs.err(this, err, true);
 
 	if (noPrettyErrs === true) return this.json(makeResponse(false, err.message));
@@ -91,5 +99,20 @@ function handleErr(err) {
 }
 
 PrettyErrs.catch = handleErr;
+
+function createErr(name, message, docType, id) {
+	const err = {
+		name,
+		message, 
+		docType,
+		id,
+	};
+	err.prototype = Object.create(Error.prototype);
+	err.prototype.constructor = err;
+
+	return err;
+}
+
+PrettyErrs.createErr = createErr;
 
 export default PrettyErrs;

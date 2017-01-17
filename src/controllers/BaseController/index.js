@@ -1,5 +1,13 @@
-import { PrettyErrs, makeResponse } from '../ControllerHelpers/index';
 
+import { PrettyErrs, makeResponse } from '../ControllerHelpers/index';
+const Promise = require('bluebird')
+
+function wrap (genFn) { 
+    const cr = Promise.coroutine(genFn) 
+    return (req, res, next) => { 
+        cr(req, res, next).catch(next) 
+    }
+}
 /*
 * Base controller class with basic CRUD functionality
 * @param reference {String} reference to the controllers model.
